@@ -1,6 +1,8 @@
 package com.example.cs441project6;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,8 +19,8 @@ public class Game extends AppCompatActivity {
 
     private TextView currentNumber, currentSet, statusMessage;
     private Switch standardSwitch, pioneerSwitch, modernSwitch, legacySwitch, historicSwitch;
-    private Button submitButton, nextButton;
-    private int roundNumber, counter;
+    private Button submitButton, nextButton, backButton;
+    private int roundNumber, randomPlaceholder, score;
 
 
     @Override
@@ -26,7 +28,7 @@ public class Game extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         roundNumber = 0;
-        counter = 0;
+        score = 0;
         ArrayList<String> nameList = createNameList();
         ArrayList<MTGSet> setList = createSetList(nameList);
         //assign the textviews
@@ -64,12 +66,12 @@ public class Game extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked == true)
                 {
-                    Toast.makeText(getBaseContext(), "Standard has been selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "Pioneer has been selected", Toast.LENGTH_SHORT).show();
 
                 }
                 else
                 {
-                    Toast.makeText(getBaseContext(), "Standard has been deselected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "Pioneer has been deselected", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -124,21 +126,27 @@ public class Game extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                statusMessage.setText("");
                 MTGSet iter;
                 Random rand = new Random();
                 int randomNumber;
-                if(roundNumber != 11)
+                roundNumber++;
+                if(roundNumber < 11)
                 {
                     //generates the set
                     do {
                         randomNumber = rand.nextInt(104) + 1;
                         iter = setList.get(randomNumber);
                     }while(iter.isBeenChosen());
+                    randomPlaceholder = randomNumber;
                     currentNumber.setText(getRoundNumberString(roundNumber));
                     currentSet.setText(iter.choose());
+                    nextButton.setVisibility(View.GONE);
+                    submitButton.setVisibility(View.VISIBLE);
                 }
                 else
                 {
+                    //cleanup step
                     nextButton.setVisibility(View.GONE);
                     submitButton.setVisibility(View.GONE);
 
@@ -148,6 +156,9 @@ public class Game extends AppCompatActivity {
                     legacySwitch.setVisibility(View.GONE);
                     historicSwitch.setVisibility(View.GONE);
 
+                    //cleanup step part 2
+                    statusMessage.setText("This round you got " + score + " correct.");
+                    backButton.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -157,16 +168,55 @@ public class Game extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //call the check function
-                counter++;
-                statusMessage.setText("The counter is: " + counter);
+                MTGSet iter = setList.get(randomPlaceholder);
+                boolean isCorrect = isCorrect(iter);
+                if(isCorrect)
+                {
+                    score++;
+                    statusMessage.setText("Correct! Press Next for the next set :)");
+                }
+                nextButton.setVisibility(View.VISIBLE);
+                submitButton.setVisibility(View.GONE);
+            }
+        });
 
+        backButton = (Button) findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Game.this, Dashboard.class);
+                startActivity(intent);
+                finish();
             }
         });
 
 
     }
 
-
+    public boolean isCorrect(MTGSet iter)
+    {
+        if(iter.isStandardLegal() != standardSwitch.isChecked())
+        {
+            return false;
+        }
+        if(iter.isPioneerLegal() != pioneerSwitch.isChecked())
+        {
+            return false;
+        }
+        if(iter.isModernLegal() != modernSwitch.isChecked())
+        {
+            return false;
+        }
+        if(iter.isLegacyLegal() != legacySwitch.isChecked())
+        {
+            return false;
+        }
+        if(iter.isHistoricLegal() != historicSwitch.isChecked())
+        {
+            return false;
+        }
+        return true;
+    }
 
     public ArrayList<String> createNameList()
     {
@@ -291,11 +341,11 @@ public class Game extends AppCompatActivity {
             }
             else if(i >= 6 & i < 14) //historic but not pioneer
             {
-                setList.add(new MTGSet(false, true, true, true, true, nameList.get(i)));
+                setList.add(new MTGSet(false, false, true, true, true, nameList.get(i)));
             }
             else if(i >= 14 & i < 34) //pioneer
             {
-                setList.add(new MTGSet(false, true, true, true, true, nameList.get(i)));
+                setList.add(new MTGSet(false, true, true, true, false, nameList.get(i)));
             }
             else if(i >= 34 & i < 67) //modern
             {
