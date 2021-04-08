@@ -1,5 +1,7 @@
 package com.example.cs441project6;
 
+import androidx.annotation.NonNull;
+
 public class MTGSet {
     private boolean standardLegal;
     private boolean pioneerLegal;
@@ -47,5 +49,56 @@ public class MTGSet {
     {
         this.beenChosen = true;
         return this.name;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        String s = this.name;
+        if(this.standardLegal)
+        {
+            s.concat(": T, ");
+        }
+        else
+        {
+            s.concat(": F, ");
+        }
+
+        if(this.pioneerLegal)
+        {
+            s.concat(" T, ");
+        }
+        else
+        {
+            s.concat(" F, ");
+        }
+
+        if(this.modernLegal)
+        {
+            s.concat(" T, ");
+        }
+        else
+        {
+            s.concat(" F, ");
+        }
+
+        if(this.legacyLegal)
+        {
+            s.concat(" T, ");
+        }
+        else
+        {
+            s.concat(" F, ");
+        }
+
+        if(this.historicLegal)
+        {
+            s.concat(" T, ");
+        }
+        else
+        {
+            s.concat(" F, ");
+        }
+        return s;
     }
 }
