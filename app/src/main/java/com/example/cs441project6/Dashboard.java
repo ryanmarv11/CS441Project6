@@ -23,14 +23,35 @@ public class Dashboard extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         startButton = findViewById(R.id.startButton);
-        leaderboardButton = findViewById(R.id.leaderboardButton);
-        instructionsButton = findViewById(R.id.instructionsButton);
+
         startButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Dashboard.this, Game.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        leaderboardButton = findViewById(R.id.leaderboardButton);
+        leaderboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Dashboard.this, Leaderboard.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        instructionsButton = findViewById(R.id.instructionsButton);
+        instructionsButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Dashboard.this, Instructions.class);
+                startActivity(intent);
+                finish();
+
             }
         });
 

@@ -3,6 +3,7 @@ package com.example.cs441project6;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -81,12 +82,12 @@ public class Game extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked == true)
                 {
-                    Toast.makeText(getBaseContext(), "Standard has been selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "Modern has been selected", Toast.LENGTH_SHORT).show();
 
                 }
                 else
                 {
-                    Toast.makeText(getBaseContext(), "Standard has been deselected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "Modern has been deselected", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -96,12 +97,12 @@ public class Game extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked == true)
                 {
-                    Toast.makeText(getBaseContext(), "Standard has been selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "Legacy has been selected", Toast.LENGTH_SHORT).show();
 
                 }
                 else
                 {
-                    Toast.makeText(getBaseContext(), "Standard has been deselected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "Legacy has been deselected", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -111,12 +112,12 @@ public class Game extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked == true)
                 {
-                    Toast.makeText(getBaseContext(), "Standard has been selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "Historic has been selected", Toast.LENGTH_SHORT).show();
 
                 }
                 else
                 {
-                    Toast.makeText(getBaseContext(), "Standard has been deselected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "Historic has been deselected", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -157,7 +158,7 @@ public class Game extends AppCompatActivity {
                     historicSwitch.setVisibility(View.GONE);
 
                     //cleanup step part 2
-                    statusMessage.setText("This round you got " + score + " correct.");
+                    statusMessage.setText("This round you got " + score + " correct. Click the leaderboard button to see your scores.");
                     backButton.setVisibility(View.VISIBLE);
                 }
             }
@@ -175,6 +176,62 @@ public class Game extends AppCompatActivity {
                     score++;
                     statusMessage.setText("Correct! Press Next for the next set :)");
                 }
+                else
+                {
+                    String errorMessage = "Unfortunately your answer was not \ncorrect, the correct answer is:\n";
+                    if(iter.isStandardLegal())
+                    {
+                        String s = "Standard: Yes\n";
+                        errorMessage = errorMessage + s;
+                    }
+                    else
+                    {
+                        String s = "Standard: No\n";
+                        errorMessage = errorMessage + s;
+                    }
+
+                    if(iter.isPioneerLegal())
+                    {
+                        String s = "Pioneer: Yes\n";
+                        errorMessage = errorMessage + s;
+                    }
+                    else
+                    {
+                        String s = "Pioneer: No\n";
+                        errorMessage = errorMessage + s;
+                    }
+                    if(iter.isModernLegal())
+                    {
+                        String s = "Modern: Yes\n";
+                        errorMessage = errorMessage + s;
+                    }
+                    else
+                    {
+                        String s = "Modern: No\n";
+                        errorMessage = errorMessage + s;
+                    }
+                    if(iter.isLegacyLegal())
+                    {
+                        String s = "Legacy: Yes\n";
+                        errorMessage = errorMessage + s;
+                    }
+                    else
+                    {
+                        String s = "Legacy: No\n";
+                        errorMessage = errorMessage + s;
+                    }
+                    if(iter.isHistoricLegal())
+                    {
+                        String s = "Historic: Yes\n";
+                        errorMessage = errorMessage + s;
+                    }
+                    else
+                    {
+                        String s = "Historic: No\n";
+                        errorMessage = errorMessage + s;
+                    }
+                    statusMessage.setText(errorMessage);
+                }
                 nextButton.setVisibility(View.VISIBLE);
                 submitButton.setVisibility(View.GONE);
             }
@@ -184,7 +241,12 @@ public class Game extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Game.this, Dashboard.class);
+                SharedPreferences preferences = getSharedPreferences("PREFS", 0);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt("lastScore", score);
+                editor.apply();
+
+                Intent intent = new Intent(Game.this, Leaderboard.class);
                 startActivity(intent);
                 finish();
             }
