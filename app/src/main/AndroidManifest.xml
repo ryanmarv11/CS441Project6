@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CS441Project6">
-        <activity android:name=".Instructions"></activity>
+        <activity android:name=".TotalScores"></activity>
+        <activity android:name=".Instructions" />
         <activity android:name=".Leaderboard" />
         <activity android:name=".Game" />
         <activity android:name=".Dashboard" />

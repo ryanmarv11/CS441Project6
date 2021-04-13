@@ -37,7 +37,7 @@ public class Dashboard extends AppCompatActivity {
         leaderboardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Dashboard.this, Leaderboard.class);
+                Intent intent = new Intent(Dashboard.this, TotalScores.class);
                 startActivity(intent);
                 finish();
             }

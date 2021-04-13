@@ -29,11 +29,11 @@ public class Instructions extends AppCompatActivity {
         });
 
         textBox = findViewById(R.id.textBox);
-        String instructions = "Welcome to the MTG Format Guesser. The way the game works is as follows:\nTo start, press the next button. Then, a random set from magic's history will be generated.\n";
-        instructions.concat("Once the set has been generated, flip the switches that correspond to the formats that that set's cards are legal in.\n");
-        instructions.concat("For example, if Theros is generated, you'd select Pioneer, Modern, and Legacy\n");
-        instructions.concat("Then, once you have made your selections, click the submit button. The game will tell you whether or not you were correct.\n");
-        instructions.concat("I hope you enjoy my game.\n");
+        String instructions = "Welcome to the MTG Format Guesser. The game works as so:\nTo start, press the next button. Then, a random set from magic's history will be generated.\n";
+        instructions += "Once the set has been generated, flip the switches that correspond to the formats that that set's cards are legal in.\n";
+        instructions += "For example, if Theros is generated, you'd select Pioneer, Modern, and Legacy\n";
+        instructions += "Then, once you have made your selections, click the submit button. The game will tell you whether or not you were correct.\n";
+        instructions += "I hope you enjoy my game.:)\n";
         textBox.setText(instructions);
 
     }
